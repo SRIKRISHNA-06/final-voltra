@@ -1,0 +1,5 @@
+target/
+startup.log
+*.log
+.idea/
+.vscode/

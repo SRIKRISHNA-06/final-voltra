@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VOLTRA: power your journey</title>
+<meta name="theme-color" content="#06111B">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%2306111B'/%3E%3Cpath d='M13 3 6 13.5h5L10 21l8-11h-5z' fill='%2312E58E'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- ============ SIGN IN / CREATE ACCOUNT ============ -->
+<div id="authView" class="auth">
+  <div class="auth-bg" aria-hidden="true"></div>
+  <header class="auth-top">
+    <div class="brand" data-brand></div>
+    <nav class="auth-nav" aria-label="Site">
+      <button type="button" data-act="authhome"><i data-ico="home"></i>Home</button>
+      <button type="button" data-act="authfind"><i data-ico="bolt"></i>Find Chargers</button>
+    </nav>
+    <span class="auth-top-gap"></span>
+  </header>
+  <div class="auth-grid">
+    <section class="auth-left">
+      <span class="tagline"><i data-ico="bolt"></i>The Future is Electric</span>
+      <h1>Powering the Future of <em>Clean Mobility</em></h1>
+      <p class="lead">Find, book and charge at trusted EV charging stations, owned by people, for people.</p>
+      <ul class="feats">
+        <li><i data-ico="shield"></i><span>Secure<br>Payments (UPI)</span></li>
+        <li><i data-ico="leaf"></i><span>Greener<br>Tomorrow</span></li>
+        <li><i data-ico="bolt"></i><span>Real-Time<br>Availability</span></li>
+      </ul>
+      <div class="drive-badge"><i data-ico="leaf"></i><strong>Drive Green. Charge Smart.</strong></div>
+    </section>
+
+    <main class="auth-panel">
+      <div class="auth-card">
+        <div class="card-head">
+          <div class="brand" data-brand></div>
+          <h2 id="authTitle">Welcome Back!</h2>
+          <p id="authSub">Sign in to continue your EV journey</p>
+        </div>
+        <p id="authMsg" class="msg" role="alert" hidden></p>
+
+        <form id="loginForm" class="form" novalidate>
+          <fieldset class="seg">
+            <legend class="sr">Sign in as</legend>
+            <label><input type="radio" name="loginRole" value="DRIVER" checked><span><i data-ico="car"></i>Driver</span></label>
+            <label><input type="radio" name="loginRole" value="HOST"><span><i data-ico="home"></i>Host</span></label>
+          </fieldset>
+          <label>Email Address
+            <span class="field"><i data-ico="mail"></i><input id="loginEmail" type="email" placeholder="Enter your email address" autocomplete="username" required></span>
+          </label>
+          <label>Password
+            <span class="field"><i data-ico="lock"></i><input id="loginPass" type="password" placeholder="Enter your password" autocomplete="current-password" required><button type="button" class="eye" data-showpw="loginPass" data-ico="eye" aria-label="Show password"></button></span>
+          </label>
+          <label class="remember"><input id="remember" type="checkbox" checked><span>Remember me</span></label>
+          <button class="btn primary wide big" type="submit">Sign In</button>
+          <p class="switch">Don't have an account? <button type="button" class="link" data-act="toreg">Create Account</button></p>
+          <div id="demo" class="demo" hidden>
+            <span>Local demo accounts</span>
+            <button type="button" class="link" data-demo="driver@voltra.in|DriverPass123|DRIVER">Driver</button>
+            <button type="button" class="link" data-demo="host@voltra.in|HostPass123|HOST">Host</button>
+            <button type="button" class="link" data-demo="admin@voltra.in|AdminPass123|DRIVER">Admin</button>
+          </div>
+        </form>
+
+        <form id="registerForm" class="form" hidden novalidate>
+          <fieldset class="seg">
+            <legend class="sr">I want to</legend>
+            <label><input type="radio" name="role" value="DRIVER" checked><span><i data-ico="car"></i>Charge my EV</span></label>
+            <label><input type="radio" name="role" value="HOST"><span><i data-ico="home"></i>Rent out a charger</span></label>
+          </fieldset>
+          <label>Full name<input id="regName" autocomplete="name" required></label>
+          <div class="two">
+            <label>Email<input id="regEmail" type="email" autocomplete="email" required></label>
+            <label>Phone<input id="regPhone" type="tel" autocomplete="tel"></label>
+          </div>
+          <label>Password
+            <span class="pw"><input id="regPass" type="password" autocomplete="new-password" required><button type="button" class="eye" data-showpw="regPass" data-ico="eye" aria-label="Show password"></button></span>
+            <small>At least 8 characters, with letters and numbers.</small>
+          </label>
+          <div id="driverFields" class="two">
+            <label>Vehicle model<input id="regVehicle" placeholder="Tata Nexon EV"></label>
+            <label>Number plate<input id="regPlate" placeholder="KA 01 AB 1234"></label>
+          </div>
+          <div id="hostFields" class="two" hidden>
+            <label>UPI ID for payouts<input id="regUpi" placeholder="name@bank"></label>
+            <label>Your address<input id="regAddress" autocomplete="street-address"></label>
+          </div>
+          <button class="btn primary wide big" type="submit">Create Account</button>
+          <p class="switch">Already have an account? <button type="button" class="link" data-act="tologin">Sign in</button></p>
+        </form>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ============ APP SHELL ============ -->
+<div id="appView" class="shell" hidden>
+  <aside id="side" class="side">
+    <div class="brand" data-brand></div>
+    <nav id="nav" aria-label="Main"></nav>
+    <div class="side-promo"><span class="leafbox" id="promoIcon"></span><div><strong>Drive Green</strong><small>For a better tomorrow</small></div></div>
+  </aside>
+  <div id="scrim" class="scrim"></div>
+  <div class="main">
+    <header class="bar">
+      <button class="iconbtn menu" id="menuBtn" aria-label="Open menu"></button>
+      <form id="topSearch" class="search" role="search"><span id="searchIcon"></span><input id="topQ" type="search" placeholder="Search chargers near you…" aria-label="Search chargers"></form>
+      <button class="iconbtn bell" id="bell" aria-label="Notifications"><span id="bellIcon"></span><b id="bellN" hidden></b></button>
+      <div class="me"><span class="avatar" id="avatar"></span><span id="whoName"></span></div>
+    </header>
+    <main id="view" class="wrap" tabindex="-1"></main>
+  </div>
+</div>
+
+<!-- ============ DIALOGS ============ -->
+<dialog id="bookDlg"><form id="bookForm" class="form">
+  <h2 id="bookTitle">Book a slot</h2>
+  <p id="bookSub" class="mute"></p>
+  <div class="two">
+    <label>Start<input type="datetime-local" id="bookStart" required></label>
+    <label>End<input type="datetime-local" id="bookEnd" required></label>
+  </div>
+  <p id="bookEst" class="est"></p>
+  <div class="actions"><button type="button" class="btn ghost" data-close>Cancel</button><button class="btn primary" type="submit" id="bookGo">Continue to payment</button></div>
+</form></dialog>
+
+<dialog id="upiDlg"><form id="upiForm" class="form">
+  <h2>Pay by UPI</h2>
+  <p class="amount" id="upiAmount"></p>
+  <a id="upiLink" class="btn primary wide" href="#">Open UPI app</a>
+  <dl class="kv">
+    <dt>Pay to</dt><dd id="upiPayee"></dd>
+    <dt>Reference</dt><dd id="upiRef"></dd>
+  </dl>
+  <label>UTR / transaction ID<input id="upiUtr" pattern="[A-Za-z0-9]{8,35}" minlength="8" maxlength="35" autocomplete="off" required><small>Find the 12-digit UTR in your UPI app after paying.</small></label>
+  <div class="actions"><button type="button" class="btn ghost" data-close>Close</button><button class="btn primary" type="submit" id="upiGo">Confirm payment</button></div>
+</form></dialog>
+
+<dialog id="pinDlg"><div class="form">
+  <h2 id="pinTitle">You're booked</h2>
+  <p id="pinNotice" class="mute"></p>
+  <div id="pinBox" class="pin" hidden></div>
+  <p id="pinExp" class="mute" hidden></p>
+  <div class="actions"><button type="button" class="btn primary" data-close>Done</button></div>
+</div></dialog>
+
+<dialog id="rateDlg"><form id="rateForm" class="form">
+  <h2>Rate your session</h2>
+  <fieldset class="rate"><legend class="sr">Rating</legend>
+    <label><input type="radio" name="rating" value="1"><span>1</span></label>
+    <label><input type="radio" name="rating" value="2"><span>2</span></label>
+    <label><input type="radio" name="rating" value="3"><span>3</span></label>
+    <label><input type="radio" name="rating" value="4"><span>4</span></label>
+    <label><input type="radio" name="rating" value="5" checked><span>5</span></label>
+  </fieldset>
+  <label>Comment<textarea id="rateText" rows="3" minlength="3" maxlength="500" required></textarea></label>
+  <div class="actions"><button type="button" class="btn ghost" data-close>Cancel</button><button class="btn primary" type="submit">Submit review</button></div>
+</form></dialog>
+
+<dialog id="stDlg"><form id="stForm" class="form">
+  <h2>Add a charger</h2>
+  <label>Name<input id="stName" minlength="3" maxlength="120" required placeholder="Koramangala home charger"></label>
+  <div class="two">
+    <label>Type<select id="stCat"><option value="P2P_HOME">Home charger</option><option value="PRIVATE_COMMERCIAL">Commercial</option><option value="GOVT_PUBLIC">Public station</option></select></label>
+    <label>Connector<select id="stConn"><option>CCS2</option><option>Type 2</option><option>CHAdeMO</option><option>Bharat DC-001</option><option>Bharat AC-001</option></select></label>
+  </div>
+  <label>Address<input id="stAddr" minlength="4" maxlength="220" required></label>
+  <div class="two">
+    <label>City<input id="stCity" value="Bengaluru" required></label>
+    <label>Contact phone<input id="stPhone" type="tel"></label>
+  </div>
+  <div class="two">
+    <label>Latitude<input id="stLat" type="number" step="any" min="-90" max="90" required></label>
+    <label>Longitude<input id="stLng" type="number" step="any" min="-180" max="180" required></label>
+  </div>
+  <button type="button" class="link" id="stLocate">Use my current location</button>
+  <div class="two">
+    <label>Power (kW)<input id="stKw" type="number" min="1" max="500" step="any" value="7.4" required></label>
+    <label>Bays<input id="stBays" type="number" min="1" max="50" value="1" required></label>
+  </div>
+  <div class="two">
+    <label>Price per hour (₹)<input id="stHr" type="number" min="10" max="5000" value="120" required></label>
+    <label>Price per kWh (₹)<input id="stKwh" type="number" min="1" max="500" value="18" required></label>
+  </div>
+  <p class="mute">New chargers appear in search after an admin verifies them.</p>
+  <div class="actions"><button type="button" class="btn ghost" data-close>Cancel</button><button class="btn primary" type="submit">Submit for review</button></div>
+</form></dialog>
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
